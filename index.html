@@ -54,13 +54,13 @@
       </div>
       <div class="card-body">
         <div class="container">
-          <script src="script.js"></script>
-          <label for="inputCity" style="margin-right: 20px"
+          <script src="cityInfo.js"></script>
+          <label for="inputStates" style="margin-right: 20px"
             >Enter the name of a city</label
           >
           <input
             type="text"
-            id="inputCity"
+            id="inputStates"
             placeholder="Type city name......"
           />
           <button
@@ -70,7 +70,7 @@
           >
             Search
           </button>
-          <button class="button-reset" onclick="checkHotel()">Clear</button>
+          <button class="button-reset" onclick="getStatesCode()">Clear</button>
         </div>
         <div id="holidays-container" style="display: none">
           <select

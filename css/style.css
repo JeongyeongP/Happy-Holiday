@@ -111,7 +111,7 @@ body {
   font-size: 12px;
 }
 
-#inputCity {
+#inputStates {
   border: none;
   border-radius: 4px;
   padding: 10px;
@@ -121,12 +121,12 @@ body {
   height: 35px;
 }
 
-#inputCity:focus {
+#inputStates:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-#inputCity::placeholder {
+#inputStates::placeholder {
   color: #c3bec7;
   font-size: 12px;
 }

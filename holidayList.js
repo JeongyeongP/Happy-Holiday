@@ -1,16 +1,22 @@
 function getCountryCode() {
   var countryName = document.getElementById("inputCountry").value;
-  const airLabsKey = "bd2a7142-10a6-450d-9932-9bf0687231ce";
-  const apiURL = `https://airlabs.co/api/v9/autocomplete?query=${countryName}&api_key=${airLabsKey}`;
-
+  const url = `https://apidojo-booking-v1.p.rapidapi.com/locations/auto-complete?text=${countryName}&languagecode=en-us`;
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": "5ed80ac7bbmsh00e5698e19f596ep1af8acjsn7518f6696b71",
+      "X-RapidAPI-Host": "apidojo-booking-v1.p.rapidapi.com",
+    },
+  };
   console.log("Getting Country Code Data");
-  return fetch(apiURL)
+  return fetch(url, options)
     .then((response) => response.json())
     .then((data) => {
       console.log(data); // log the data for debugging
-      if (data.response.countries && data.response.countries.length > 0) {
-        const countryArray = data.response.countries;
-        var countryCode = countryArray[0].code;
+      console.log(data[0].cc1);
+      if (data[0] && data[0].cc1.length > 0) {
+        const countryCode = data[0].cc1;
+        // var countryCode = countryArray[0].code;
         console.log("This is country code ", countryCode);
         return countryCode;
       } else {
