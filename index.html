@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/favicon.ico" type="image/x-icon" rel="icon" />
+    <!-- Style -->
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <h1 class="header">Happy Holiday</h1>
+  </head>
+  <body>
+    <!-- Displaying Holidays -->
+    <div class="card shadow mb-4" style="width: 60%">
+      <div class="card-header">
+        <div class="container">
+          <h2 style="font-size: 25px">
+            Do you want to check the HOLIDAYS in the country?
+          </h2>
+          <img src="image/worldmap.png" alt="World map" />
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="container">
+          <script src="holidayList.js"></script>
+          <label for="inputCountry" style="margin-right: 20px"
+            >Enter the name of a country</label
+          >
+          <input
+            type="text"
+            id="inputCountry"
+            placeholder="Type country name......"
+          />
+          <button
+            class="button-search"
+            onclick="getCountryCode()"
+            style="margin: 10px"
+          >
+            Search
+          </button>
+          <button class="button-reset" onclick="clearHolidays()">Clear</button>
+        </div>
+        <ul id="holidays"></ul>
+      </div>
+    </div>
+    <!-- Select States -->
+    <div class="card shadow mb-4" style="width: 60%">
+      <div class="card-header">
+        <div class="container">
+          <h2 style="font-size: 25px">Do you plan to go travel?</h2>
+          <img src="image/airplane.jpeg" alt="World map" />
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="container">
+          <script src="script.js"></script>
+          <label for="inputCity" style="margin-right: 20px"
+            >Enter the name of a city</label
+          >
+          <input
+            type="text"
+            id="inputCity"
+            placeholder="Type city name......"
+          />
+          <button
+            class="button-search"
+            onclick="getCountryName()"
+            style="margin: 10px"
+          >
+            Search
+          </button>
+          <button class="button-reset" onclick="checkHotel()">Clear</button>
+        </div>
+        <div id="holidays-container" style="display: none">
+          <select
+            id="holidays-drop"
+            style="padding: 10px; margin-top: 10px; width: 100%"
+          >
+            <option value="">Holiday List</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
