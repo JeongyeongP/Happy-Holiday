@@ -38,11 +38,11 @@ function getCountryName() {
       }
     })
     .then((countryCode) => {
-      statesCode = getStatesCode(countryCode);
+      //statesCode = getStatesCode(countryCode);
       console.log("This is country code ", countryCode);
       console.log("This is state code ", statesCode);
       console.log("Start Holiday Listtttttt", statesCode);
-      getHoliday(countryCode, statesCode); // pass countryCode and stateCode as arguments
+      //getHoliday(countryCode, statesCode); // pass countryCode and stateCode as arguments
     })
     .catch((error) => {
       console.log(error);
@@ -90,9 +90,11 @@ function getStatesCode(countryCode) {
 
 function getHoliday(countryCode, statesCode) {
   console.log("Start to get Holidays");
+
   // Displaying Drop Box
   const holidaysContainer = document.getElementById("holidays-container");
 
+  holidaysContainer.style.display = "none";
   if (holidaysContainer.style.display === "none") {
     holidaysContainer.style.display = "block";
   } else {
@@ -108,7 +110,10 @@ function getHoliday(countryCode, statesCode) {
     .then((holiday) => {
       console.log(holiday);
       const holidaysList = document.getElementById("holidays-drop");
-      console.log("CHeckingggggggg after itttttttt");
+      console.log("Drop If there is any child");
+      while (holidaysList.firstChild) {
+        holidaysList.removeChild(holidaysList.firstChild);
+      }
       const addedHolidays = {};
       holiday.response.holidays.forEach((h) => {
         // the current holiday's date
@@ -316,7 +321,7 @@ function setTableHeaders(table, headers) {
   }
 }
 
-async function getHotel(destID) {
+function getHotel(destID) {
   const url = `https://apidojo-booking-v1.p.rapidapi.com/properties/list?offset=0&arrival_date=2023-05-15&departure_date=2023-05-20&guest_qty=1&dest_ids=${destID}
   &room_qty=1&search_type=city&children_age=0&search_id=none&price_filter_currencycode=USD&order_by=popularity&languagecode=en-us&travel_purpose=leisure`;
   const options = {
@@ -326,11 +331,23 @@ async function getHotel(destID) {
       "X-RapidAPI-Host": "apidojo-booking-v1.p.rapidapi.com",
     },
   };
-  try {
-    const response = await fetch(url, options);
-    const result = await response.text();
-    console.log(result);
-  } catch (error) {
-    console.error(error);
-  }
+
+  console.log("*********Hotel Info Get*********");
+  return fetch(url, options)
+    .then((response) => response.text())
+    .then((data) => {
+      const Data = JSON.parse(data);
+      console.log(Data);
+      console.log(Data.data);
+    })
+    .catch((error) => {
+      console.log("Error fetching weather data:", error);
+      return null; // return null if there was an error
+    });
+}
+
+function clearInfo() {
+  const holidaysContainer = document.getElementById("holidays-container");
+  holidaysContainer.style.display = "none";
+  document.getElementById("weatherInfo").style.display = "none";
 }
