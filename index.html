@@ -11,7 +11,7 @@
     <h1 class="header">Happy Holiday</h1>
   </head>
   <body>
-    <!-- Displaying Holidays -->
+    <!-- Displaying Holidays for Country-->
     <div class="card shadow mb-4" style="width: 60%">
       <div class="card-header">
         <div class="container">
@@ -56,12 +56,12 @@
         <div class="container">
           <script src="cityInfo.js"></script>
           <label for="inputStates" style="margin-right: 20px"
-            >Enter the name of a city</label
+            >Enter the name of a states</label
           >
           <input
             type="text"
             id="inputStates"
-            placeholder="Type city name......"
+            placeholder="Type name of states......"
           />
           <button
             class="button-search"
@@ -70,7 +70,9 @@
           >
             Search
           </button>
-          <button class="button-reset" onclick="getStatesCode()">Clear</button>
+          <button class="button-reset" onclick="displayWeatherInfo()">
+            Clear
+          </button>
         </div>
         <div id="holidays-container" style="display: none">
           <select
@@ -82,5 +84,34 @@
         </div>
       </div>
     </div>
+    <!-- <div id="weatherInfo" style="display: none; width: 60%"> -->
+    <div
+      id="weatherInfo"
+      class="card shadow mb-4"
+      style="display: none; width: 60%"
+    >
+      <div class="card-header">
+        <div class="container">
+          <h2 style="font-size: 25px">Weather Information</h2>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 style="font-size: 15px; padding: 10px; margin-left: 5px">
+          If there is no weather forecast information available for the selected
+          date, weather information from one year ago will be provided.
+        </h3>
+        <table id="weatherTable">
+          <thead>
+            <!-- <tr>
+              <th>Date</th>
+              <th>Temperature High</th>
+              <th>Temperature Low</th>
+            </tr> -->
+          </thead>
+          <tbody id="weatherTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- </div> -->
   </body>
 </html>

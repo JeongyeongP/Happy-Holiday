@@ -6,7 +6,7 @@ let destID;
 let latitude;
 let longitude;
 
-function getCountryName() {
+async function getCountryName() {
   statesName = document.getElementById("inputStates").value;
   const url = `https://apidojo-booking-v1.p.rapidapi.com/locations/auto-complete?text=${statesName}&languagecode=en-us`;
   const options = {
@@ -17,41 +17,36 @@ function getCountryName() {
     },
   };
   console.log("Getting City Information: Country, latitude and longitude");
-  return fetch(url, options)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data); // log the data for debugging
-      if (data[0] && data[0].cc1.length > 0) {
-        countryName = data[0].country;
-        countryCode = data[0].cc1;
-        destID = data[0].dest_id;
-        latitude = data[0].latitude;
-        longitude = data[0].longitude;
-        console.log("This is country name ", countryName);
-        console.log("This is country code ", countryCode);
-        console.log("This is destination ID", destID);
-        console.log("This is latitude", latitude);
-        console.log("This is longitude", longitude);
-        return countryCode;
-      } else {
-        throw new Error("Invalid city name");
-      }
-    })
-    .then((countryCode) => {
-      statesCode = getStatesCode(countryCode);
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log(data); // log the data for debugging
+    if (data[0] && data[0].cc1.length > 0) {
+      countryName = data[0].country;
+      countryCode = data[0].cc1;
+      destID = data[0].dest_id;
+      latitude = data[0].latitude;
+      longitude = data[0].longitude;
+      console.log("This is country name ", countryName);
+      console.log("This is country code ", countryCode);
+      console.log("This is destination ID", destID);
+      console.log("This is latitude", latitude);
+      console.log("This is longitude", longitude);
+      countryCode = await getStatesCode(countryCode);
       console.log("This is country code ", countryCode);
       console.log("This is state code ", statesCode);
       console.log("Start Holiday Listtttttt", statesCode);
-      getHoliday(countryCode, statesCode); // pass countryCode and stateCode as arguments
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      await getHoliday(countryCode, statesCode); // pass countryCode and stateCode as arguments
+    } else {
+      throw new Error("Invalid city name");
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function getStatesCode(countryCode) {
+async function getStatesCode(countryCode) {
   console.log("I am getting!!!!!!!!!", countryCode);
-  // var stateName = document.getElementById("inputStates").value;
   console.log("Getting State Information");
   var headers = new Headers();
   headers.append(
@@ -66,74 +61,82 @@ function getStatesCode(countryCode) {
   };
 
   url = `https://api.countrystatecity.in/v1/countries/${countryCode}/states/`;
-  return fetch(url, requestOptions)
-    .then((response) => response.text())
-    .then((result) => {
-      const Data = JSON.parse(result);
-      console.log(Data);
-      for (let i = 0; i < Data.length; i++) {
-        console.log("Checking State");
-        if (
-          Data[i].name.toLowerCase().trim() === statesName.toLowerCase().trim()
-        ) {
-          console.log(statesName, " found:", Data[i]);
-          console.log(Data[i].iso2);
-          return Data[i].iso2;
-        }
+  try {
+    const response = await fetch(url, requestOptions);
+    const result = await response.text();
+    const Data = JSON.parse(result);
+    console.log(Data);
+    for (let i = 0; i < Data.length; i++) {
+      console.log("Checking State");
+      if (
+        Data[i].name.toLowerCase().trim() === statesName.toLowerCase().trim()
+      ) {
+        console.log(statesName, " found:", Data[i]);
+        console.log(Data[i].iso2);
+        return Data[i].iso2;
       }
-    })
-    .catch((error) => {
-      console.log("From States Country");
-      console.log(error);
-    });
+    }
+  } catch (error) {
+    console.log("From States Country");
+    console.log(error);
+  }
 }
 
-function getHoliday(countryCode, statesCode) {
+async function getHoliday(countryCode, statesCode) {
   console.log("Start to get Holidays");
+
   // Displaying Drop Box
   const holidaysContainer = document.getElementById("holidays-container");
+  const holidaysList = document.getElementById("holidays-drop");
+
+  // Clear existing holiday list
+  //holidaysList.innerHTML = "";
 
   if (holidaysContainer.style.display === "none") {
     holidaysContainer.style.display = "block";
   } else {
     holidaysContainer.style.display = "none";
+    holidaysList.innerHTML = ""; // clear existing options
   }
 
-  // construct the API URL with the input country parameter
+  // Construct the API URL with the input country parameter
   const calendarificKey = "3a396b216c15c82cf983a738aaf89483ff73b6bd";
   const holidayApiURL = `https://calendarific.com/api/v2/holidays?&api_key=${calendarificKey}&country=${countryCode}&year=2023&location=${statesCode}`;
-  console.log("Getting Holiday Data");
-  fetch(holidayApiURL)
-    .then((response) => response.json())
-    .then((holiday) => {
-      console.log(holiday);
-      const holidaysList = document.getElementById("holidays-drop");
-      console.log("CHeckingggggggg after itttttttt");
-      const addedHolidays = {};
-      holiday.response.holidays.forEach((h) => {
-        // the current holiday's date
-        const holidayDate = new Date(h.date.iso);
-        // today's date
-        const today = new Date();
-        if (holidayDate >= today) {
-          if (!addedHolidays[h.name]) {
-            const option = document.createElement("option");
-            option.textContent = `${h.name} - ${h.date.iso}`;
-            option.value = `${h.name} - ${h.date.iso}`;
-            holidaysList.appendChild(option);
-            addedHolidays[h.name] = true;
-          }
+
+  try {
+    console.log("Getting Holiday Data");
+    const response = await fetch(holidayApiURL);
+    const holiday = await response.json();
+    console.log(holiday);
+
+    const addedHolidays = {};
+    holiday.response.holidays.forEach((h) => {
+      // the current holiday's date
+      const holidayDate = new Date(h.date.iso);
+      // today's date
+      const today = new Date();
+      if (holidayDate >= today) {
+        if (!addedHolidays[h.name]) {
+          const option = document.createElement("option");
+          option.textContent = `${h.name} - ${h.date.iso}`;
+          option.value = `${h.name} - ${h.date.iso}`;
+          holidaysList.appendChild(option);
+          addedHolidays[h.name] = true;
         }
-      });
-      // add event listener for when a holiday is selected
-      holidaysList.addEventListener("change", () => {
-        const selectedValue = event.target.value;
-        const selectedDate = selectedValue.split(" - ")[1];
-        console.log("Selected date is ", selectedDate);
-        displayWeatherInfo(selectedDate);
-      });
-    })
-    .catch((error) => console.log(error));
+      }
+    });
+
+    // Add event listener for when a holiday is selected
+    holidaysList.addEventListener("change", async () => {
+      const selectedValue = event.target.value;
+      const selectedDate = selectedValue.split(" - ")[1];
+      console.log("Selected date is ", selectedDate);
+      await displayWeatherInfo(selectedDate);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
   console.log("Done");
 }
 
@@ -249,23 +252,15 @@ async function displayWeatherInfo(selectedDate) {
   const weatherTableBody = document.getElementById("weatherTableBody");
   const weatherData = await getWeather(selectedDate);
 
-  // clear existing table rows
-  weatherTableBody.innerHTML = "";
   document.getElementById("weatherInfo").style.display = "block";
 
-  // // add title
-  // const title = document.createElement("h3");
-
-  // remove existing table header
-  const existingTableHeader = weatherTable.querySelector("thead");
-  if (existingTableHeader) {
-    existingTableHeader.parentNode.removeChild(existingTableHeader);
-  }
+  // add title
+  const title = document.createElement("h3");
 
   // check if the first value is "History" or "Forecast"
   if (weatherData[0] === "History") {
-    // title.textContent =
-    //   "Sorry, no weather forecast is available for the selected date. Showing data from a year ago instead.";
+    title.textContent =
+      "Sorry, no weather forecast is available for the selected date. Showing data from a year ago instead.";
     // set table headers
     const headers = [
       "Date",
@@ -274,17 +269,17 @@ async function displayWeatherInfo(selectedDate) {
     ];
     setTableHeaders(weatherTable, headers);
   } else if (weatherData[0] === "Forecast") {
-    // title.textContent =
-    //   "This is the weather forecast for the next 5 days starting from the date you selected!";
+    title.textContent =
+      "This is the weather forecast for the next 5 days starting from the date you selected!";
     // set table headers
     const headers = ["Date", "Weather", "Summary"];
     setTableHeaders(weatherTable, headers);
   }
 
-  // title.style.fontSize = "15px";
-  // title.style.padding = "10px 0";
-  // title.style.marginLeft = "5px";
-  // weatherTable.parentNode.insertBefore(title, weatherTable);
+  title.style.fontSize = "15px";
+  title.style.padding = "10px 0";
+  title.style.marginLeft = "5px";
+  weatherTable.parentNode.insertBefore(title, weatherTable);
 
   // add new rows
   for (let i = 1; i < weatherData.length; i += 3) {
@@ -313,24 +308,5 @@ function setTableHeaders(table, headers) {
     const th = document.createElement("th");
     th.textContent = headers[i];
     row.appendChild(th);
-  }
-}
-
-async function getHotel(destID) {
-  const url = `https://apidojo-booking-v1.p.rapidapi.com/properties/list?offset=0&arrival_date=2023-05-15&departure_date=2023-05-20&guest_qty=1&dest_ids=${destID}
-  &room_qty=1&search_type=city&children_age=0&search_id=none&price_filter_currencycode=USD&order_by=popularity&languagecode=en-us&travel_purpose=leisure`;
-  const options = {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": "5ed80ac7bbmsh00e5698e19f596ep1af8acjsn7518f6696b71",
-      "X-RapidAPI-Host": "apidojo-booking-v1.p.rapidapi.com",
-    },
-  };
-  try {
-    const response = await fetch(url, options);
-    const result = await response.text();
-    console.log(result);
-  } catch (error) {
-    console.error(error);
   }
 }
