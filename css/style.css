@@ -189,3 +189,29 @@ h3 {
 #weatherTable tr:hover {
   background-color: #ddd;
 }
+
+#hotelTable {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+#hotelTable th,
+#hotelTable td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+#hotelTable th {
+  background-color: #e9e3fb;
+  color: #525154;
+}
+
+#hotelTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#hotelTable tr:hover {
+  background-color: #ddd;
+}

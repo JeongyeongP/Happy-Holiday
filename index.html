@@ -48,15 +48,15 @@
     <div class="card shadow mb-4" style="width: 60%">
       <div class="card-header">
         <div class="container">
-          <h2 style="font-size: 25px">Do you plan to go travel?</h2>
-          <img src="image/airplane.jpeg" alt="World map" />
+          <h2 style="font-size: 25px">Do you plan to go TRAVEL?</h2>
+          <img src="image/airplane.jpeg" alt="airplane" />
         </div>
       </div>
       <div class="card-body">
         <div class="container">
           <script src="cityInfo.js"></script>
           <label for="inputStates" style="margin-right: 20px"
-            >Enter the name of a states</label
+            >Check coming up Holidays in your destination</label
           >
           <input
             type="text"
@@ -73,6 +73,9 @@
           <button class="button-reset" onclick="clearInfo()">Clear</button>
         </div>
         <div id="holidays-container" style="display: none">
+          <h3 style="font-size: 15px; padding: 10px; margin-left: 5px">
+            Please select Holiday to check Information about Weather and Hotel
+          </h3>
           <select
             id="holidays-drop"
             style="padding: 10px; margin-top: 10px; width: 100%"
@@ -91,6 +94,7 @@
       <div class="card-header">
         <div class="container">
           <h2 style="font-size: 25px">Weather Information</h2>
+          <img src="image/weather.png" alt="weather" />
         </div>
       </div>
       <div class="card-body">
@@ -104,22 +108,33 @@
         </table>
       </div>
     </div>
-    <div id="hotelInfo" class="card shadow mb-4" style="width: 60%">
+    <div
+      id="hotelInfo"
+      class="card shadow mb-4"
+      style="display: none; width: 60%"
+    >
       <div class="card-header">
         <div class="container">
           <h2 style="font-size: 25px">Hotel Information</h2>
+          <img src="image/hotel.png" alt="hotle" />
         </div>
       </div>
       <div class="card-body">
         <h3 style="font-size: 15px; padding: 10px; margin-left: 5px">
-          If there is no weather forecast information available for the selected
-          date, weather information from one year ago will be provided.
+          It shows 5 hotels in the order of popularity that can be booked on the
+          selected date.
         </h3>
-        </button>
-          <button class="button-reset" onclick="getHotel()">Hotel</button>
-        <table id="weatherTable">
-          <thead></thead>
-          <tbody id="weatherTableBody"></tbody>
+        <table id="hotelTable">
+          <thead>
+            <tr>
+              <th>Hotel Name</th>
+              <th>Address</th>
+              <th>Review Score</th>
+              <th>Total Price</th>
+              <th>Currency</th>
+            </tr>
+          </thead>
+          <tbody id="hotelTableBody"></tbody>
         </table>
       </div>
     </div>

@@ -38,11 +38,11 @@ function getCountryName() {
       }
     })
     .then((countryCode) => {
-      //statesCode = getStatesCode(countryCode);
+      statesCode = getStatesCode(countryCode);
       console.log("This is country code ", countryCode);
       console.log("This is state code ", statesCode);
       console.log("Start Holiday Listtttttt", statesCode);
-      //getHoliday(countryCode, statesCode); // pass countryCode and stateCode as arguments
+      getHoliday(countryCode, statesCode); // pass countryCode and stateCode as arguments
     })
     .catch((error) => {
       console.log(error);
@@ -131,11 +131,13 @@ function getHoliday(countryCode, statesCode) {
         }
       });
       // add event listener for when a holiday is selected
-      holidaysList.addEventListener("change", () => {
+      holidaysList.addEventListener("change", async () => {
         const selectedValue = event.target.value;
         const selectedDate = selectedValue.split(" - ")[1];
         console.log("Selected date is ", selectedDate);
-        displayWeatherInfo(selectedDate);
+
+        await displayWeatherInfo(selectedDate);
+        displayHotelInfo(selectedDate);
       });
     })
     .catch((error) => console.log(error));
@@ -258,9 +260,6 @@ async function displayWeatherInfo(selectedDate) {
   weatherTableBody.innerHTML = "";
   document.getElementById("weatherInfo").style.display = "block";
 
-  // // add title
-  // const title = document.createElement("h3");
-
   // remove existing table header
   const existingTableHeader = weatherTable.querySelector("thead");
   if (existingTableHeader) {
@@ -269,9 +268,6 @@ async function displayWeatherInfo(selectedDate) {
 
   // check if the first value is "History" or "Forecast"
   if (weatherData[0] === "History") {
-    // title.textContent =
-    //   "Sorry, no weather forecast is available for the selected date. Showing data from a year ago instead.";
-    // set table headers
     const headers = [
       "Date",
       "Highest Temperature (°C) ",
@@ -279,17 +275,9 @@ async function displayWeatherInfo(selectedDate) {
     ];
     setTableHeaders(weatherTable, headers);
   } else if (weatherData[0] === "Forecast") {
-    // title.textContent =
-    //   "This is the weather forecast for the next 5 days starting from the date you selected!";
-    // set table headers
     const headers = ["Date", "Weather", "Summary"];
     setTableHeaders(weatherTable, headers);
   }
-
-  // title.style.fontSize = "15px";
-  // title.style.padding = "10px 0";
-  // title.style.marginLeft = "5px";
-  // weatherTable.parentNode.insertBefore(title, weatherTable);
 
   // add new rows
   for (let i = 1; i < weatherData.length; i += 3) {
@@ -321,9 +309,18 @@ function setTableHeaders(table, headers) {
   }
 }
 
-function getHotel(destID) {
-  const url = `https://apidojo-booking-v1.p.rapidapi.com/properties/list?offset=0&arrival_date=2023-05-15&departure_date=2023-05-20&guest_qty=1&dest_ids=${destID}
-  &room_qty=1&search_type=city&children_age=0&search_id=none&price_filter_currencycode=USD&order_by=popularity&languagecode=en-us&travel_purpose=leisure`;
+function getHotel(selectedDate) {
+  console.log("Selected Date in getHotel function");
+  console.log(selectedDate);
+  const hotelData = [];
+  const endDate = new Date(selectedDate);
+  endDate.setDate(endDate.getDate() + 4);
+  const endDateString = endDate.toISOString().split("T")[0];
+  console.log("Selected Date in getHotel function");
+  console.log(endDateString);
+  console.log("We are getting Hotel");
+  console.log(destID);
+  const url = `https://apidojo-booking-v1.p.rapidapi.com/properties/list?offset=0&arrival_date=${selectedDate}&departure_date=${endDateString}&guest_qty=1&dest_ids=${destID}&room_qty=1&search_type=city&children_age=0&search_id=none&price_filter_currencycode=USD&order_by=popularity&languagecode=en-us&travel_purpose=leisure`;
   const options = {
     method: "GET",
     headers: {
@@ -338,7 +335,12 @@ function getHotel(destID) {
     .then((data) => {
       const Data = JSON.parse(data);
       console.log(Data);
-      console.log(Data.data);
+      console.log(Data.result);
+      const hotels = Data.result;
+      for (let i = 0; i < Math.min(5, hotels.length); i++) {
+        hotelData.push(hotels[i]);
+      }
+      return hotelData;
     })
     .catch((error) => {
       console.log("Error fetching weather data:", error);
@@ -346,8 +348,49 @@ function getHotel(destID) {
     });
 }
 
+function displayHotelInfo(selectedDate) {
+  // clear existing table rows
+
+  document.getElementById("hotelInfo").style.display = "block";
+
+  getHotel(selectedDate).then((hotelData) => {
+    // Get the table body element
+    const hotelTableBody = document.getElementById("hotelTableBody");
+    hotelTableBody.innerHTML = "";
+    console.log("Please displaying Hotel now");
+    console.log(hotelData);
+
+    for (let i = 0; i < hotelData.length; i++) {
+      const row = document.createElement("tr");
+
+      const nameCell = document.createElement("td");
+      nameCell.textContent = hotelData[i].hotel_name;
+      row.appendChild(nameCell);
+
+      const addressCell = document.createElement("td");
+      addressCell.textContent = hotelData[i].address;
+      row.appendChild(addressCell);
+
+      const reviewScoreCell = document.createElement("td");
+      reviewScoreCell.textContent = hotelData[i].review_score;
+      row.appendChild(reviewScoreCell);
+
+      const totalPriceCell = document.createElement("td");
+      totalPriceCell.textContent = hotelData[i].min_total_price;
+      row.appendChild(totalPriceCell);
+
+      const currencyCell = document.createElement("td");
+      currencyCell.textContent = hotelData[i].currency_code;
+      row.appendChild(currencyCell);
+
+      hotelTableBody.appendChild(row);
+    }
+  });
+}
+
 function clearInfo() {
   const holidaysContainer = document.getElementById("holidays-container");
   holidaysContainer.style.display = "none";
   document.getElementById("weatherInfo").style.display = "none";
+  document.getElementById("hotelInfo").style.display = "none";
 }
