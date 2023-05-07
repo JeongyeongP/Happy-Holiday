@@ -103,7 +103,7 @@ function getHoliday(countryCode, statesCode) {
 
   // construct the API URL with the input country parameter
   const calendarificKey = "3a396b216c15c82cf983a738aaf89483ff73b6bd";
-  const holidayApiURL = `https://calendarific.com/api/v2/holidays?&api_key=${calendarificKey}&country=${countryCode}&year=2023&location=${statesCode}`;
+  const holidayApiURL = `https://calendarific.com/api/v2/holidays?&api_key=${calendarificKey}&country=${countryCode}&year=2023&location=${countryCode}-${statesCode}`;
   console.log("Getting Holiday Data");
   fetch(holidayApiURL)
     .then((response) => response.json())
