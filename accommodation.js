@@ -1,4 +1,4 @@
-export function getHotel(selectedDate, destID) {
+function getHotel(selectedDate, destID) {
   const hotelData = [];
   const endDate = new Date(selectedDate);
   endDate.setDate(endDate.getDate() + 4);

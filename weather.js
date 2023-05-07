@@ -1,4 +1,4 @@
-export function getWeather(selectedDate, latitude, longitude) {
+function getWeather(selectedDate, latitude, longitude) {
   const weatherData = [];
   const currentDate = new Date();
   const selectedDateTime = new Date(selectedDate);
@@ -82,7 +82,7 @@ export function getWeather(selectedDate, latitude, longitude) {
   }
 }
 
-export function getNextFourDays(selectedDate) {
+function getNextFourDays(selectedDate) {
   const dates = [];
   dates.push(selectedDate);
   const startDate = new Date(selectedDate);
@@ -140,7 +140,7 @@ export async function displayWeatherInfo(selectedDate, latitude, longitude) {
   }
 }
 
-export function setTableHeaders(table, headers) {
+function setTableHeaders(table, headers) {
   const thead = table.createTHead();
   const row = thead.insertRow();
 
