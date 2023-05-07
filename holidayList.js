@@ -30,13 +30,16 @@ function getCountryCode() {
 }
 
 function getEveryHoliday(countryCode) {
-  const holidayApiURL = `https://calendarific.com/api/v2/holidays?&api_key=3a396b216c15c82cf983a738aaf89483ff73b6bd&country=${countryCode}&year=2023`;
-  console.log("Getting Holiday Data");
+  const calendarificKey = "3a396b216c15c82cf983a738aaf89483ff73b6bd";
+  const holidayApiURL = `https://calendarific.com/api/v2/holidays?&api_key=${calendarificKey}&country=${countryCode}&year=2023`;
   fetch(holidayApiURL)
     .then((response) => response.json())
     .then((holiday) => {
-      console.log(holiday);
+      // console.log(holiday);
       const holidaysList = document.getElementById("holidays");
+      while (holidaysList.firstChild) {
+        holidaysList.removeChild(holidaysList.firstChild);
+      }
       holiday.response.holidays.forEach((h) => {
         const li = document.createElement("li");
         li.textContent = `${h.name} - ${h.date.iso}`;
@@ -44,7 +47,6 @@ function getEveryHoliday(countryCode) {
       });
     })
     .catch((error) => console.log(error));
-  console.log("Done");
 }
 
 function clearHolidays() {
