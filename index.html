@@ -54,7 +54,7 @@
       </div>
       <div class="card-body">
         <div class="container">
-          <script src="cityInfo.js"></script>
+          <script src="travelInfo.js"></script>
           <label for="inputStates" style="margin-right: 20px"
             >Check coming up Holidays in your destination</label
           >
@@ -65,7 +65,7 @@
           />
           <button
             class="button-search"
-            onclick="getCountryName()"
+            onclick="getTravelInfo()"
             style="margin: 10px"
           >
             Search
@@ -115,19 +115,19 @@
     >
       <div class="card-header">
         <div class="container">
-          <h2 style="font-size: 25px">Hotel Information</h2>
+          <h2 style="font-size: 25px">Accommodation Information</h2>
           <img src="image/hotel.png" alt="hotle" />
         </div>
       </div>
       <div class="card-body">
         <h3 style="font-size: 15px; padding: 10px; margin-left: 5px">
-          It shows 5 hotels in the order of popularity that can be booked on the
-          selected date.
+          It shows 5 accommodations in the order of popularity that can be
+          booked on the selected date.
         </h3>
         <table id="hotelTable">
           <thead>
             <tr>
-              <th>Hotel Name</th>
+              <th>Accommodation Name</th>
               <th>Address</th>
               <th>Review Score</th>
               <th>Total Price</th>

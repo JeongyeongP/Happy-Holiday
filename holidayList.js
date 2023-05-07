@@ -1,6 +1,6 @@
 function getCountryCode() {
   var countryName = document.getElementById("inputCountry").value;
-  const url = `https://apidojo-booking-v1.p.rapidapi.com/locations/auto-complete?text=${countryName}&languagecode=en-us`;
+  const countryCodeURL = `https://apidojo-booking-v1.p.rapidapi.com/locations/auto-complete?text=${countryName}&languagecode=en-us`;
   const options = {
     method: "GET",
     headers: {
@@ -8,24 +8,20 @@ function getCountryCode() {
       "X-RapidAPI-Host": "apidojo-booking-v1.p.rapidapi.com",
     },
   };
-  console.log("Getting Country Code Data");
-  return fetch(url, options)
+  return fetch(countryCodeURL, options)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data); // log the data for debugging
-      console.log(data[0].cc1);
+      // // log data for debugging
+      // console.log(data);
       if (data[0] && data[0].cc1.length > 0) {
         const countryCode = data[0].cc1;
-        // var countryCode = countryArray[0].code;
-        console.log("This is country code ", countryCode);
         return countryCode;
       } else {
+        window.alert("Invalid country name");
         throw new Error("Invalid country name");
       }
     })
     .then((countryCode) => {
-      // call the getCountry function with the countryCode value
-      console.log("Start to get Holidays");
       getEveryHoliday(countryCode);
     })
     .catch((error) => {
@@ -34,7 +30,6 @@ function getCountryCode() {
 }
 
 function getEveryHoliday(countryCode) {
-  // construct the API URL with the input country parameter
   const holidayApiURL = `https://calendarific.com/api/v2/holidays?&api_key=3a396b216c15c82cf983a738aaf89483ff73b6bd&country=${countryCode}&year=2023`;
   console.log("Getting Holiday Data");
   fetch(holidayApiURL)
@@ -45,11 +40,6 @@ function getEveryHoliday(countryCode) {
       holiday.response.holidays.forEach((h) => {
         const li = document.createElement("li");
         li.textContent = `${h.name} - ${h.date.iso}`;
-        // add an event listener to the li element that executes a function when it is clicked
-        li.addEventListener("click", () => {
-          // modify this function to do whatever you want when the li element is clicked
-          console.log(`You clicked on ${h.name}`);
-        });
         holidaysList.appendChild(li);
       });
     })
