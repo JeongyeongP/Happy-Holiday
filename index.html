@@ -54,7 +54,7 @@
       </div>
       <div class="card-body">
         <div class="container">
-          <script src="travelInfo.js"></script>
+          <script type="module" src="travelInfo.js"></script>
           <label for="inputStates" style="margin-right: 20px"
             >Check coming up Holidays in your destination</label
           >
@@ -63,14 +63,8 @@
             id="inputStates"
             placeholder="Type name of states......"
           />
-          <button
-            class="button-search"
-            onclick="getTravelInfo()"
-            style="margin: 10px"
-          >
-            Search
-          </button>
-          <button class="button-reset" onclick="clearInfo()">Clear</button>
+          <button class="button-search2" style="margin: 10px">Search</button>
+          <button class="button-reset2" onclick="clearInfo()">Clear</button>
         </div>
         <div id="holidays-container" style="display: none">
           <h3 style="font-size: 15px; padding: 10px; margin-left: 5px">
