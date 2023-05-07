@@ -14,7 +14,7 @@ searchButton.addEventListener("click", getTravelInfo);
 const restButton = document.querySelector(".button-reset2");
 restButton.addEventListener("click", clearInfo);
 
-export function getTravelInfo() {
+function getTravelInfo() {
   statesName = document.getElementById("inputStates").value;
   const statesInfoURL = `https://apidojo-booking-v1.p.rapidapi.com/locations/auto-complete?text=${statesName}&languagecode=en-us`;
   const options = {
@@ -49,7 +49,7 @@ export function getTravelInfo() {
     });
 }
 
-export function getStatesCode(countryCode) {
+function getStatesCode(countryCode) {
   const statesCodeURL = `https://api.countrystatecity.in/v1/countries/${countryCode}/states/`;
   var headers = new Headers();
   headers.append(
@@ -81,7 +81,7 @@ export function getStatesCode(countryCode) {
     });
 }
 
-export function getHoliday(countryCode, statesCode) {
+function getHoliday(countryCode, statesCode) {
   const holidaysContainer = document.getElementById("holidays-container");
   holidaysContainer.style.display = "none";
   if (holidaysContainer.style.display === "none") {
@@ -133,7 +133,7 @@ export function getHoliday(countryCode, statesCode) {
     });
 }
 
-export function clearInfo() {
+function clearInfo() {
   const holidaysContainer = document.getElementById("holidays-container");
   holidaysContainer.style.display = "none";
   document.getElementById("weatherInfo").style.display = "none";
