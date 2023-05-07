@@ -33,7 +33,7 @@ function getTravelInfo() {
     })
     .then((countryCode) => {
       statesCode = getStatesCode(countryCode);
-      getHoliday(countryCode, statesCode); // pass countryCode and stateCode as arguments
+      getHoliday(countryCode, statesCode);
     })
     .catch((error) => {
       console.log(error);
